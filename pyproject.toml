@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "song2sleeve"
+version = "0.1.0"
+description = "Streamlit app for generating album covers from songs"
+authors = ["Megan Fillion <megan1811@gmail.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+librosa = "^0.10"
+matplotlib = "^3.10.3"
+demucs = "^4.0.1"
+torchaudio = "^2.7.1"
+faster-whisper = "^1.1.1"
+sentencepiece = "^0.2.0"
+keybert = "^0.9.0"
+transformers = "^4.53.1"
+boto3 = "^1.39.4"
+essentia = "^2.1b6.dev1177"
+tensorflow = "^2.14"
+tensorflow-hub = "^0.16.1"
+soundfile = "^0.13.1"
+numpy = "^1.23"
+streamlit = "^1.46.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
