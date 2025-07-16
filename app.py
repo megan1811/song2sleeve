@@ -1,8 +1,6 @@
 import streamlit as st
 from pathlib import Path
-import tempfile
 from pipeline import Pipeline
-import time
 import random
 
 ## STYLE

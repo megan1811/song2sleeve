@@ -1,21 +1,19 @@
 from pathlib import Path
 import shutil
-from PIL import Image
 import time
 
-from models import AudioSeparator, LyricsTranscriber, InstrumentalTagger
+from models import LyricsTranscriber, InstrumentalTagger
 from utils import extract_instrumental_features, structure_claude_prompt
 from client import BedrockClient
 
 class Pipeline():
     """
     A high-level audio-to-image pipeline that:
-      1. Separates an audio file into vocals and instrumentals.
-      2. Transcribes lyrics from the vocal track.
-      3. Extracts tempo and timbre features from the instrumental track.
-      4. Tags instruments present in the audio.
-      5. Generates an image prompt using a language model (Claude Sonnet).
-      6. Generates a final image using Stable Diffusion.
+      1. Transcribes lyrics from the vocal track.
+      2. Extracts tempo and timbre features from the instrumental track.
+      3. Tags instruments present in the audio.
+      4. Generates an image prompt using a language model (Claude Sonnet).
+      5. Generates a final image using Stable Diffusion.
     """
     def __init__(self, output_path: str = "tmp", verbose: bool = False):
         """
@@ -35,7 +33,6 @@ class Pipeline():
         self.output_dir.mkdir(parents=True, exist_ok=True) 
         
         # Initiate models needed for pipeline
-        self.separator = AudioSeparator(self.output_dir, self.verbose)
         self.transcriber = LyricsTranscriber(self.verbose)
         self.tagger = InstrumentalTagger(self.verbose)
         self.client = BedrockClient(self.verbose)
@@ -46,7 +43,6 @@ class Pipeline():
     def run(self, audio_path: Path) -> dict:
         """
         Execute the full pipeline:
-          - Separate audio
           - Transcribe lyrics
           - Extract instrumental features
           - Tag instruments
@@ -59,14 +55,13 @@ class Pipeline():
         """
         start = time.time()
         
-        vocals_path, instrumental_path = self.separator.infer(audio_path)
-        lyrics = self.transcriber.infer(vocals_path)
-        tempo, spectral_centroid_mean = extract_instrumental_features(instrumental_path, self.verbose)
-        tags = self.tagger.infer(instrumental_path)
+        lyrics = self.transcriber.infer(audio_path)
+        tempo, spectral_centroid_mean = extract_instrumental_features(audio_path, self.verbose)
+        tags = self.tagger.infer(audio_path)
         
         claude_prompt = structure_claude_prompt(lyrics, tempo, spectral_centroid_mean, tags)
         sd_prompt = self.client.infer_claude_sonnet(claude_prompt)
-        image = self.client.infer_stable_diffusion(sd_prompt, self.output_dir, steps=15)
+        image = self.client.infer_stable_diffusion(sd_prompt, self.output_dir, steps=20)
         
         return {
             "lyrics": lyrics,
