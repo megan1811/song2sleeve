@@ -1,75 +1,89 @@
-# Song 2 Sleeve
+# 🎵 Song2Sleeve
 
-Transform any song into a custom AI-generated album cover.
+**Song2Sleeve** is a Streamlit app that transforms a song into a custom, professional‑grade album cover.  
+Upload a `.wav` file, and the app will analyze its lyrics, tempo, timbre, and instrumentation to generate an imaginative visual prompt and render an album cover image using AWS Bedrock (Claude Sonnet + Stable Diffusion XL).
 
-Song2Sleeve is a full-stack Streamlit application that analyzes any .wav track and generates a unique album cover inspired by both its lyrics and audio characteristics.
+---
 
-Built for the GenAI Hackathon hosted by AWS and Impetus, this project fuses audio analysis with generative AI to bring music to life visually.
+## ✨ Inspiration
 
-## AI Pipeline Architecture
+Album art often reflects the mood and essence of a song.  
+Song2Sleeve explores how AI can bridge audio analysis and creative image generation to quickly produce unique, genre‑aware cover art.
 
-The Song2Sleeve pipeline transforms a raw .wav music file into a fully generated album cover image by integrating signal processing, machine listening, large language modeling, and diffusion-based image generation. The pipeline was designed to be modular, interpretable, and optimized for both vocal and instrumental audio. Here’s a deep dive into each component:
+---
 
-### 1. Audio Input
+## 🚀 What It Does
 
-- **User Input:** The user uploads a .wav file via the Streamlit frontend.
+1. **Upload** a `.wav` audio file.
+2. **Analyze** the song:
+   - Transcribe lyrics with [Faster‑Whisper](https://github.com/guillaumekln/faster-whisper),
+   - Extract tempo & spectral centroid (timbre) with [librosa](https://librosa.org),
+   - Tag instruments with [YAMNet](https://tfhub.dev/google/yamnet/1).
+3. **Generate a prompt** with [Claude 3 Sonnet](https://aws.amazon.com/bedrock/).
+4. **Create a cover** with [Stable Diffusion XL](https://aws.amazon.com/bedrock/).
 
-### 2. Vocal–Instrumental Separation with Demucs
+**Output:**  
+🖼️ A unique album cover image and a summary of the analyzed features.
 
-- **Tool:** Facebook AI’s Demucs, a state-of-the-art deep neural network for music source separation.
-- **Function:** Separates the uploaded audio into two stems: `vocals.wav` for lyric transcription & `instrumental.wav` for musical analysis (timbre, tempo, instrument tags)
-- `Note:` This improves downstream performance by isolating clean vocal and instrumental signals.
+---
 
-### 3. Lyrics Transcription
+## 🏗️ How We Built It
 
-- **Model:** faster-whisper, a highly optimized and quantized implementation of OpenAI’s Whisper ASR.
-- **Purpose:** Converts vocals.wav into a raw lyric transcript, enabling a semantic interpretation of the track’s narrative and themes.
+- **Frontend:** [Streamlit](https://streamlit.io) for the UI and workflow.
+- **Audio Analysis:** `faster-whisper`, `librosa`, `tensorflow-hub` (YAMNet).
+- **Prompt Generation:** Claude Sonnet via AWS Bedrock.
+- **Image Generation:** Stable Diffusion XL via AWS Bedrock.
+- **Pipeline Orchestration:** Custom Python classes (`Pipeline`, `LyricsTranscriber`, `InstrumentalTagger`).
 
-### 4. Instrumental Analysis
+---
 
-Two complementary methods are applied to instrumental.wav:
+## 📦 Local Installation
 
-#### A. Feature Extraction (Librosa)
+> ⚠️ AWS Bedrock access is required for Claude & Stable Diffusion.  
+> Set your AWS credentials (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`) in your environment.
 
-Metrics Extracted:
+### 1️⃣ Clone the repository
 
-- **Tempo (BPM):** Beat estimation using beat tracking.
-- **Spectral Centroid (Hz):** A proxy for timbre or brightness.
-
-#### B. Instrument Tagging (YAMNet)
-
-- **Model:** YAMNet — A convolutional neural network trained on over 500 AudioSet labels.
-- **Purpose:** Predicts the dominant instruments and sound textures in the audio.
-
-### 5. Prompt Engineering with Claude Sonnet
-
-- **LLM:** Anthropic Claude 3 Sonnet, used for interpreting poetic text, accessed via **AWS Bedrock**.
-- **Goal:** To synthesize a compelling and stylistically consistent text-to-image prompt that encompasses the outputs from **3. Lyrics Transcripton** and **4. Instrumental Analysis**.
-
-### 6. Image Generation with SDXL
-
-- **Model**: Stable Diffusion XL (SDXL) via AWS Bedrock (stability.stable-diffusion-xl-v1)
-- Here we generate the final image using the prompt generated in the previous step.
-
-## Testing & Evaluation
-
-We validated the pipeline across a variety of genres, using royalty-free tracks from Pixabay Music. Results showed:
-
-- Album covers with a similar aesthetic to the imput music
-- Distinct mood capture in the final image
-- Pertinent album covers even for songs with minimal lyrics
-
-## Installation & Deployment
-
-We provide two deployment pathways:
-
-1. Local Testing
-
-```
-    poetry install
-    streamlit run app.py
+```bash
+git clone https://github.com/megan1811/song2sleeve.git
+cd song2sleeve
 ```
 
-2. AWS Production Deployment
+### 2️⃣ Install dependencies
 
-Hosted via EC2 t3.medium with Amazon Linux, publically available:
+Using Poetry:
+
+```bash
+poetry install
+poetry shell
+```
+
+Or using pip:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3️⃣ Run the app
+
+```bash
+streamlit run app.py
+```
+
+Open your browser at http://localhost:8501.
+
+---
+
+## 📂 Project Structure
+
+```bash
+song2sleeve/
+│
+├── app.py            # Streamlit frontend
+├── pipeline.py       # High-level audio-to-image pipeline
+├── client.py         # AWS Bedrock client (Claude & SDXL)
+├── models.py         # Transcription (Whisper) & tagging (YAMNet)
+├── utils.py          # Feature extraction & prompt structuring
+├── poetry.toml       # Poetry dependency configuration
+└── README.md         # Project documentation
+```
