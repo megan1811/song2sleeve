@@ -61,7 +61,7 @@ class Pipeline():
         
         claude_prompt = structure_claude_prompt(lyrics, tempo, spectral_centroid_mean, tags)
         sd_prompt = self.client.infer_claude_sonnet(claude_prompt)
-        image = self.client.infer_stable_diffusion(sd_prompt, self.output_dir, steps=20)
+        image = self.client.infer_stable_diffusion(sd_prompt, self.output_dir, cfg_scale=9, steps=30)
         
         return {
             "lyrics": lyrics,
@@ -74,9 +74,3 @@ class Pipeline():
             "pipeline_time": round(time.time() - start, 2) 
         }
         
-        
-# if __name__ == "__main__":
-    # audio_path = "data/techno.wav"
-    # pipe = Pipeline(verbose=True)
-    # pipe.run(audio_path)
-    

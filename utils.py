@@ -44,17 +44,20 @@ def structure_claude_prompt(lyrics: str, tempo_bpm: float, spectral_centroid: fl
     """
 
     prompt = f"""
-        Generate a vivid, imaginative prompt for an AI image generator to create an album cover.
+        Write a clear, actionable instruction for an AI image generator to create a professional‑grade album cover.
+        The instruction must begin with: "Generate a professional‑grade album cover containing..."  
+        Base the instruction on the mood and themes suggested by the lyrics and audio features below.  
+        If the lyrics are minimal or unclear, emphasize the sound, genre, and instrumentation instead.  
+        Include specific visual elements such as setting, objects, color palette, lighting, composition, and artistic style (e.g., surrealism, digital painting, retro vinyl aesthetic).  
+        Do not include any song titles, artist names, or extra commentary.  
+        Return only the final instruction, in under 5 sentences.
 
-        Base your description on the mood and themes suggested by the following lyrics and musical features. Focus on emotional tone, instrumentation, and atmosphere. If the lyrics are minimal or unclear, emphasize the sound and genre instead.
-
-        Only return the final image prompt — no explanations or preamble. Keep it under 3 sentences.
-        Lyrics:
-        \"\"\"{lyrics}\"\"\"
+        Lyrics: {lyrics}
 
         Audio Features:
         - Tempo: {tempo_bpm} BPM
         - Timbre (Spectral Centroid): {spectral_centroid} Hz
         - Instrument Tags: {", ".join([cl for cl, _ in instrument_tags])}
         """
+    
     return prompt

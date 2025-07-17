@@ -112,7 +112,7 @@ def show_result():
     container.image(result["image"], caption="🎨 Generated Album Cover")
 
     container.markdown("### Analysis Summary")
-    container.markdown(f"**📝 Lyrics (excerpt):** {result['lyrics'][:300]}...")
+    container.markdown(f"**📝 Lyrics (excerpt):** {result['lyrics']}...")
     container.markdown(f"**🎶 Tempo:** {result['tempo']} BPM")
     container.markdown(f"**🎛️ Timbre:** {result['spectral_centroid']} Hz")
     container.markdown(f"**🔖 Instrument Tags:** {result['tags']}")

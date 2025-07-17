@@ -21,7 +21,7 @@ class BedrockClient:
         self.client = boto3.client("bedrock-runtime", region_name="us-east-1")
         self.verbose = verbose
         
-    def infer_claude_sonnet(self, prompt: str, max_tokens: int = 100) -> str:
+    def infer_claude_sonnet(self, prompt: str, max_tokens: int = 250) -> str:
         """
         Generates a short, image-generation prompt for an album cover using Claude Sonnet,
         based on lyrics and audio features.
@@ -99,6 +99,5 @@ class BedrockClient:
         if self.verbose:
             print("##IMAGE GENERATION")
             print(f"Inference time: {inference_time:.2f}s")
-            image.show()
 
         return image
