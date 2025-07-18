@@ -75,25 +75,25 @@ def show_home():
     container.title("🎵 Song2Sleeve")
     container.markdown("Upload a `.wav` song and get a custom album cover based on the lyrics + musical features.")
 
-    # Create a persistent "uploads" directory in your project
-    upload_dir = Path("uploads")
-    upload_dir.mkdir(exist_ok=True)
+    output_dir = Path("tmp")
+    output_dir.mkdir(exist_ok=True)
     
     # media uploader
     uploaded_file = container.file_uploader("Upload your `.wav` file", type=["wav"])
 
     if uploaded_file is not None:
-        tmp_path = upload_dir / uploaded_file.name
+        tmp_path = output_dir / uploaded_file.name
         with open(tmp_path, "wb") as f:
             f.write(uploaded_file.read())
 
         # Run pipeline and record outputs
         with container.status("🎧 Analyzing track...", expanded=True) as status:
             status.update(label="📲 Setting up cloud server...")
-            pipe = Pipeline(output_path="tmp", verbose=True)
+            pipe = Pipeline(output_path=output_dir, verbose=True)
             status.update(label="🪈 Running analysis pipeline...")
             result = pipe.run(tmp_path)
             status.update(label="✅ Done!", state="complete")
+            pipe.close()
         
         # Send result dictionary to show_result page
         st.session_state.result = result
@@ -112,12 +112,12 @@ def show_result():
     container.image(result["image"], caption="🎨 Generated Album Cover")
 
     container.markdown("### Analysis Summary")
-    container.markdown(f"**📝 Lyrics (excerpt):** {result['lyrics']}...")
+    container.markdown(f"**📝 Lyrics (excerpt):** {result['lyrics'][:300]}...")
     container.markdown(f"**🎶 Tempo:** {result['tempo']} BPM")
     container.markdown(f"**🎛️ Timbre:** {result['spectral_centroid']} Hz")
     container.markdown(f"**🔖 Instrument Tags:** {result['tags']}")
-    container.markdown(f"**🎯 Claud Prompt:** {result['claude_prompt']}")
-    container.markdown(f"**🐎 Stable Diffusion Prompt:** {result['stable_diffusion_prompt']}")
+    # container.markdown(f"**🎯 Claud Prompt:** {result['claude_prompt']}")
+    container.markdown(f"**🐎 Image Generation Prompt:** {result['stable_diffusion_prompt']}")
     container.markdown(f"**⏱️ Total Inference Time:** {result['pipeline_time']}s")
 
     # navigate back to home page

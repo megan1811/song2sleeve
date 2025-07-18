@@ -93,9 +93,8 @@ class BedrockClient:
         result = json.loads(response["body"].read())
         image_bytes = result['artifacts'][0]['base64']  
 
-        # Decode and display
+        # Decode image
         image = Image.open(BytesIO(base64.b64decode(image_bytes)))
-        image.save(output_dir / "generated_img.png")
         if self.verbose:
             print("##IMAGE GENERATION")
             print(f"Inference time: {inference_time:.2f}s")

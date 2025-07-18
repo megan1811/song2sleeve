@@ -25,11 +25,6 @@ class Pipeline():
         """
         self.verbose = verbose
         self.output_dir = Path(output_path)
-        
-        # Remove existing output directory if present
-        if self.output_dir.exists() and self.output_dir.is_dir():
-            shutil.rmtree(self.output_dir)
-    
         self.output_dir.mkdir(parents=True, exist_ok=True) 
         
         # Initiate models needed for pipeline
@@ -73,4 +68,10 @@ class Pipeline():
             "stable_diffusion_prompt": sd_prompt,
             "pipeline_time": round(time.time() - start, 2) 
         }
+        
+    def close(self):
+        # Remove existing output directory if present
+        if self.output_dir.exists() and self.output_dir.is_dir():
+            shutil.rmtree(self.output_dir)
+            
         
