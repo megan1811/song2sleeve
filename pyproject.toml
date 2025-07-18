@@ -14,6 +14,8 @@ tensorflow = "^2.14"
 tensorflow-hub = "^0.16.1"
 numpy = "^1.23"
 streamlit = "^1.46.1"
+fastapi = "^0.116.1"
+uvicorn = "^0.35.0"
 
 
 [tool.poetry.group.dev.dependencies]
