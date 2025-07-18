@@ -3,6 +3,10 @@
 **Song2Sleeve** is a Streamlit app that transforms a song into a custom, professional‑grade album cover.  
 Upload a `.wav` file, and the app will analyze its lyrics, tempo, timbre, and instrumentation to generate an imaginative visual prompt and render an album cover image using AWS Bedrock (Claude Sonnet + Stable Diffusion XL).
 
+✨ \*Below is a snapshot of the app interface, shown here with the input song **“Hotel California.”\***
+
+![Song2Sleeve Interface](assets/images/interface.png)
+
 ---
 
 ## ✨ Inspiration
