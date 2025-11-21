@@ -2,7 +2,7 @@
 
 ## 📘 Introduction
 
-**Song2Sleeve** is a Streamlit-based system for automatic album-cover generation from an audio file. The core contribution of this work is a multi-modal conditioning pipeline that integrates (1) lyric-level semantic features, extracted via speech-to-text, and (2) audio-driven descriptors such as timbre, tempo, instrument tags, and instrument tags. This combined representation is used to condition a generative image model, enabling the creation of coherent, music-aware album artwork.
+**Song2Sleeve** is a Streamlit-based system for automatic **cover art generation** from an audio file. The core contribution of this work is a multi-modal conditioning pipeline that integrates **(1) lyric-level semantic features**, extracted via speech-to-text, and **(2) audio-driven descriptors** such as timbre, tempo, instrument tags, and instrument tags. This combined representation is used to condition a generative image model, enabling the creation of coherent, music-aware album artwork.
 
 Album covers serve as a high-level visual summary of a track’s mood, style, and artistic identity. By unifying audio analysis with modern text-to-image models, Song2Sleeve demonstrates how cross-modal signals can enhance creative generation and yield more contextually aware artwork than lyric-only approaches.
 
@@ -21,7 +21,7 @@ Album covers serve as a high-level visual summary of a track’s mood, style, an
 
 ## 🥞 Tech Stack
 
-- **Frontend:**: [Streamlit](https://streamlit.io) (UI, uploads, visualization).
+- **Frontend:**: [**Streamlit**](https://streamlit.io) (UI, uploads, visualization).
 
 - **Backend**: Python modular pipeline; on-instance inference with Demucs, Faster-Whisper, librosa, YAMNet (PyTorch/TF)
 
@@ -62,7 +62,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Open your browser at http://localhost:8501, and you should see an interface similar to that shown under.
+Open your browser at http://localhost:8501.
 
 ### 4️⃣ Interface Example
 
@@ -86,6 +86,6 @@ song2sleeve/
 
 ## 🐾 Next Steps
 
-A promising evolution of this project would be to develop an audio–image embedding model, similar to CLIP, that aligns audio representations directly with an image latent space. Unlike CLIP’s text–image contrastive setup, this approach would learn a joint space between audio features and visual concepts, allowing the model to capture musical and lyrical information end-to-end.
+A promising evolution of this project would be to develop an **audio–image embedding model**, similar to [**CLIP**](https://github.com/openai/CLIP), that aligns audio representations directly with an image latent space. Unlike CLIP’s text–image contrastive setup, this approach would learn a joint space between audio features and visual concepts, allowing the model to capture musical and lyrical information end-to-end.
 
 By bypassing the intermediate text-prompt stage, the system would preserve information often lost during transcription & instrument tagging as emotional tone and stylistic nuance. My hypothesis is that conditioning image generation on learned audio embeddings (rather than text prompts) would produce cover art that more faithfully reflects the input track’s artistic identity.
