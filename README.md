@@ -1,6 +1,6 @@
 # 🎵 Song2Sleeve
 
-## Introduction
+## 📘 Introduction
 
 **Song2Sleeve** is a Streamlit-based system for automatic album-cover generation from an audio file. The core contribution of this work is a multi-modal conditioning pipeline that integrates (1) lyric-level semantic features, extracted via speech-to-text, and (2) audio-driven descriptors such as timbre, tempo, instrument tags, and instrument tags. This combined representation is used to condition a generative image model, enabling the creation of coherent, music-aware album artwork.
 
@@ -83,3 +83,9 @@ song2sleeve/
 ├── poetry.toml       # Poetry dependency configuration
 └── README.md         # Project documentation
 ```
+
+## 🐾 Next Steps
+
+A promising evolution of this project would be to develop an audio–image embedding model, similar to CLIP, that aligns audio representations directly with an image latent space. Unlike CLIP’s text–image contrastive setup, this approach would learn a joint space between audio features and visual concepts, allowing the model to capture musical and lyrical information end-to-end.
+
+By bypassing the intermediate text-prompt stage, the system would preserve information often lost during transcription & instrument tagging as emotional tone and stylistic nuance. My hypothesis is that conditioning image generation on learned audio embeddings (rather than text prompts) would produce cover art that more faithfully reflects the input track’s artistic identity.
