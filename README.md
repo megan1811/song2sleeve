@@ -1,45 +1,33 @@
 # 🎵 Song2Sleeve
 
-**Song2Sleeve** is a Streamlit app that transforms a song into a custom, professional‑grade album cover.  
-Upload a `.wav` file, and the app will analyze its lyrics, tempo, timbre, and instrumentation to generate an imaginative visual prompt and render an album cover image using AWS Bedrock (Claude Sonnet + Stable Diffusion XL).
+## Introduction
 
-✨ \*Below is a snapshot of the app interface, shown here with the input song **“Hotel California.”\***
+**Song2Sleeve** is a Streamlit-based system for automatic album-cover generation from an audio file. The core contribution of this work is a multi-modal conditioning pipeline that integrates (1) lyric-level semantic features, extracted via speech-to-text, and (2) audio-driven descriptors such as timbre, tempo, instrument tags, and instrument tags. This combined representation is used to condition a generative image model, enabling the creation of coherent, music-aware album artwork.
 
-![Song2Sleeve Interface](assets/images/interface.png)
+Album covers serve as a high-level visual summary of a track’s mood, style, and artistic identity. By unifying audio analysis with modern text-to-image models, Song2Sleeve demonstrates how cross-modal signals can enhance creative generation and yield more contextually aware artwork than lyric-only approaches.
 
----
+## 🕵🏻‍♀️ How it works
 
-## ✨ Inspiration
-
-Album art often reflects the mood and essence of a song.  
-Song2Sleeve explores how AI can bridge audio analysis and creative image generation to quickly produce unique, genre‑aware cover art.
-
----
-
-## 🚀 What It Does
+![Flowchart](assets/images/song2sleeve.drawio.png)
 
 1. **Upload** a `.wav` audio file.
 2. **Analyze** the song:
    - Transcribe lyrics with [Faster‑Whisper](https://github.com/guillaumekln/faster-whisper),
    - Extract tempo & spectral centroid (timbre) with [librosa](https://librosa.org),
    - Tag instruments with [YAMNet](https://tfhub.dev/google/yamnet/1).
-3. **Generate a prompt** with [Claude 3 Sonnet](https://aws.amazon.com/bedrock/).
-4. **Create a cover** with [Stable Diffusion XL](https://aws.amazon.com/bedrock/).
+3. **Generate a prompt** with [Claude 3 Sonnet](https://aws.amazon.com/bedrock/) using the outputs from stage 2.
+4. **Create a cover** with [Stable Diffusion XL](https://aws.amazon.com/bedrock/), using the prompt generated from the previous stage.
+5. **Output** A unique cover art image generated from extracted lyrics & audio elements.
 
-**Output:**  
-🖼️ A unique album cover image and a summary of the analyzed features.
+## 🥞 Tech Stack
 
----
+- **Frontend:**: [Streamlit](https://streamlit.io) (UI, uploads, visualization).
 
-## 🏗️ How We Built It
+- **Backend**: Python modular pipeline; on-instance inference with Demucs, Faster-Whisper, librosa, YAMNet (PyTorch/TF)
 
-- **Frontend:** [Streamlit](https://streamlit.io) for the UI and workflow.
-- **Audio Analysis:** `faster-whisper`, `librosa`, `tensorflow-hub` (YAMNet).
-- **Prompt Generation:** Claude Sonnet via AWS Bedrock.
-- **Image Generation:** Stable Diffusion XL via AWS Bedrock.
-- **Pipeline Orchestration:** Custom Python classes (`Pipeline`, `LyricsTranscriber`, `InstrumentalTagger`).
+- **Cloud Inference**: on-instance inference with Demucs, Faster-Whisper, librosa, YAMNet (PyTorch/TF)
 
----
+- **Deployment**: AWS EC2 (t3.medium) + optional GPU Spot; Docker + Poetry for reproducible environments
 
 ## 📦 Local Installation
 
@@ -74,9 +62,13 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Open your browser at http://localhost:8501.
+Open your browser at http://localhost:8501, and you should see an interface similar to that shown under.
 
----
+### 4️⃣ Interface Example
+
+✨ \*Below is a snapshot of the app interface, after generating album art for the famous song **“Hotel California.”\*** by the Eagles. ✨
+
+![Song2Sleeve Interface](assets/images/interface.png)
 
 ## 📂 Project Structure
 
